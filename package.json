@@ -1,0 +1,19 @@
+{
+  "name": "monobank",
+  "version": "1.0.0",
+  "description": "monobank.ua js api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "monobank",
+    "js",
+    "api"
+  ],
+  "author": "Teselka",
+  "license": "MIT",
+  "dependencies": {
+    "libgovno": "^1.1.9"
+  }
+}
