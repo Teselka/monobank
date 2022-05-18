@@ -23,15 +23,17 @@ const client = new Monobank(process.env.token);
 ```
 
 #### Available methods
-• `client.currency(force)` - Bank currency info
+• `client.currency(force?: boolean | undefined)` - Bank currency info
    - force - Force update (without cache)
 
-• `client.client_info()` - Client's user info
+• `client.client_info(force?: boolean)` - Client's user info
+  - force - Force update (without cache)
 
-• `client.set_webhook(url)`
+• `client.set_webhook(url: string)`
   - url - Webhook url
 
-• `client.statement(account, from, to)`
+• `client.statement(account: string, from?: string | number , to?: string | number, force?: boolean)`
   - account - Client account id
-  - from - Unix time in seconds 
+  - from - Unix time in seconds (default is current time - 30days)
   - to - Unix time in seconds
+  - force - Force update (without cache)
