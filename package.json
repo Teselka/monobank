@@ -1,5 +1,5 @@
 {
-  "name": "monobank",
+  "name": "monobankua",
   "version": "1.0.0",
   "description": "monobank.ua js api",
   "main": "index.js",
@@ -11,10 +11,19 @@
   },
   "keywords": [
     "monobank",
+    "monobankua",
     "js",
     "api",
     "node"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teselka/monobank.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Teselka/monobank/issues"
+  },
+  "homepage": "https://github.com/Teselka/monobank#readme",
   "author": "Teselka",
   "license": "MIT",
   "dependencies": {
