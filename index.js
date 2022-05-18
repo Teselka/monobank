@@ -59,6 +59,8 @@ class Monobank
     #token
     #base_uri
     #last_currency
+    #last_info
+    #last_statement
     
     /**
      * @description Monobank api constructor
@@ -69,6 +71,7 @@ class Monobank
         this.#token = token ?? null;
         this.#base_uri = base_uri ?? 'api.monobank.ua';
         this.#last_currency = {time: 0, data:null};
+        this.#last_info = {time: 0, data:null};
     }
 
     /**
@@ -87,21 +90,22 @@ class Monobank
         });
     }
 
+    #checkcache(obj, time, force) {
+        const curtime = Math.floor(Date.now()/1000);
+        const res = time == 0 || curtime - obj.time >= time || force;
+        if (res)
+            obj.time = curtime;
+        return res;
+    }
+
     /**
      * @see https://api.monobank.ua/docs/#operation--bank-currency-get
      * @param {boolean} force - Force update (without cache)
      * @returns {Promise<Array<CurrencyInfo>>} Bank currency info
      */
     async currency(force) {
-        const time = Math.floor(Date.now()/1000);
-        if (time == 0 
-            || time - this.#last_currency.time >= 360
-            || force) {
-
-            const resp = await this.method('get', '/bank/currency', false);
-            this.#last_currency.time = time;
-            this.#last_currency.data = resp.json();
-        }
+        if (this.#checkcache(this.#last_currency, 360, force))
+            this.#last_currency.data = (await this.method('get', '/bank/currency', false)).json();
 
         return this.#last_currency.data;
     }
@@ -110,8 +114,11 @@ class Monobank
      * @see https://api.monobank.ua/docs/#operation--personal-client-info-get
      * @returns {Promise<UserInfo>} - Client's user info
      */
-    async client_info() {
-        return (await this.method('get', '/personal/client-info', true)).json();
+    async client_info(force) {
+        if (this.#checkcache(this.#last_info, 60, force))
+            this.#last_info.data = (await this.method('get', '/personal/client-info', true)).json();
+
+        return this.#last_info.data;
     }
 
     /**
@@ -130,10 +137,14 @@ class Monobank
      * @param {string | number | undefined} to - Unix time in seconds
      * @returns {Promise<Array<StatementItem>>} - List of the statements 
      */
-    async statement(account, from, to) {
-        from = from ?? (Math.floor(Date.now()/1000) - 2592000);
-        to = to ?? '';
-        return (await this.method('get', `/personal/statement/${account}/${typeof(from) == 'string' && from || from.toString()}/${typeof(to) == 'string' && to || to.toString()}`, true)).json();
+    async statement(account, from, to, force) {
+        if (this.#checkcache(this.#last_statement, 60, force)) {
+            from = from ?? (Math.floor(Date.now()/1000) - 2592000);
+            to = to ?? '';
+            this.#last_statement.data = (await this.method('get', `/personal/statement/${account}/${typeof(from) == 'string' && from || from.toString()}/${typeof(to) == 'string' && to || to.toString()}`, true)).json();
+        }
+        
+        return this.#last_statement.data;
     }
 }
 
