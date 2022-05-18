@@ -72,6 +72,7 @@ class Monobank
         this.#base_uri = base_uri ?? 'api.monobank.ua';
         this.#last_currency = {time: 0, data:null};
         this.#last_info = {time: 0, data:null};
+        this.#last_statement = {time: 0, data:null};
     }
 
     /**
