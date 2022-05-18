@@ -116,6 +116,7 @@ class Monobank
 
     /**
      * @see https://api.monobank.ua/docs/#operation--personal-webhook-post
+     * @param {string} url - Webhook url
      * @returns {boolean}
      */
     async set_webhook(url) {
@@ -124,7 +125,7 @@ class Monobank
     
     /**
      * @see https://api.monobank.ua/docs/#operation--personal-statement--account---from---to--get
-     * @param {string} account 
+     * @param {string} account  - Client account id
      * @param {string | number | undefined} from - Unix time in seconds 
      * @param {string | number | undefined} to - Unix time in seconds
      * @returns {Promise<Array<StatementItem>>} - List of the statements 
