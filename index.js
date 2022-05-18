@@ -100,7 +100,7 @@ class Monobank
 
     /**
      * @see https://api.monobank.ua/docs/#operation--bank-currency-get
-     * @param {boolean} force - Force update (without cache)
+     * @param {boolean | undefined} force - Force update (without cache)
      * @returns {Promise<Array<CurrencyInfo>>} Bank currency info
      */
     async currency(force) {
@@ -112,6 +112,7 @@ class Monobank
 
     /**
      * @see https://api.monobank.ua/docs/#operation--personal-client-info-get
+     * @param {boolean | undefined} force - Force update (without cache)
      * @returns {Promise<UserInfo>} - Client's user info
      */
     async client_info(force) {
@@ -135,6 +136,7 @@ class Monobank
      * @param {string} account  - Client account id
      * @param {string | number | undefined} from - Unix time in seconds 
      * @param {string | number | undefined} to - Unix time in seconds
+     * @param {boolean | undefined} force - Force update (without cache)
      * @returns {Promise<Array<StatementItem>>} - List of the statements 
      */
     async statement(account, from, to, force) {
