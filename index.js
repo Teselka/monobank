@@ -2,7 +2,7 @@ const { requests } = require('libgovno');
 
 /**
  * It's a subtype of the UserInfo
- * @see https://api.monobank.ua/docs/#definition-UserInfo
+ * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1client-info/get
  * @typedef {Object} UserInfoAccount
  * @property {string} id - Account identifier
  * @property {string} sendId - Not documentated
@@ -15,21 +15,37 @@ const { requests } = require('libgovno');
  */
 
 /**
- * @see https://api.monobank.ua/docs/#definition-UserInfo
- * @typedef {Object} UserInfo
- * @property {string} id - Client identifier
- * @property {string} name - Client's name
- * @property {string} webHookUrl - New transaction notification url
- * @property {Array<UserInfoAccount>} accounts - Array of the client's accounts
+ * It's a subtype of the UserInfo
+ * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1client-info/get
+ * @typedef {Object} UserInfoJar
+ * @property {string} id - Jar indetifier
+ * @property {string} sendId - https://send.monobank.ua/{sendId} service identifier
+ * @property {string} title - Jar title
+ * @property {string} description - Jar description
+ * @property {number} currencyCode - Jar currency code (ISO 4217)
+ * @property {number} balance - Jar balance
+ * @property {number} goal - Jar's goal in the minimal currency amount
  */
 
 /**
- * @see https://api.monobank.ua/docs/#definition-StatementItems
+ * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1client-info/get
+ * @typedef {Object} UserInfo
+ * @property {string} clientId - Client identifier
+ * @property {string} name - Client's name
+ * @property {string} webHookUrl - New transaction notification url
+ * @property {string} permissions - Client's permissions
+ * @property {Array<UserInfoAccount>} accounts - Array of the client's accounts
+ * @property {Array<UserInfoJar>} jars - Array of the client's jars
+ */
+
+/**
+ * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1statement~1{account}~1{from}~1{to}/get
  * @typedef {Object} StatementItem
  * @property {string} id - Transaction identifier
  * @property {number} time - Unix time in seconds
  * @property {string} description - Transaction description
  * @property {number} mcc - Transaction Merchant Category Code (ISO 18245)
+ * @property {number} originalMcc = Original Merchant Category Code (ISO 18245)
  * @property {boolean} hold - Authorization hold status
  * @property {number} amount - Transaction amount in the original currency in the minimal currency amount
  * @property {number} operationAmount - Transaction amount in the bank's currency (UAH) in the minimal currency amount
@@ -39,12 +55,13 @@ const { requests } = require('libgovno');
  * @property {number} balance - Account balance in the minimal currency amount
  * @property {(string | undefined)} comment - Transaction comment
  * @property {(string | undefined)} receiptId - Receipt id for the check.gov.ua
+ * @property {(stirng | undefined)} invoiceId - Invoide id (only on money transfer)
  * @property {string} counterEdrpou - EDRPOU of the counterparty
  * @property {string} counterIban - IBAN of the counterparty
  */
 
 /**
- * @see https://api.monobank.ua/docs/#definition-CurrencyInfo
+ * @see https://api.monobank.ua/docs/index.html#tag/Publichni-dani/paths/~1bank~1currency/get
  * @typedef {Object} CurrencyInfo
  * @property {number} currencyCodeA - Currency code (ISO 4217)
  * @property {number} currencyCodeB - Currency code (ISO 4217)
@@ -100,7 +117,7 @@ class Monobank
     }
 
     /**
-     * @see https://api.monobank.ua/docs/#operation--bank-currency-get
+     * @see https://api.monobank.ua/docs/index.html#tag/Publichni-dani/paths/~1bank~1currency/get
      * @param {boolean | undefined} force - Force update (without cache)
      * @returns {Promise<Array<CurrencyInfo>>} Bank currency info
      */
@@ -112,7 +129,7 @@ class Monobank
     }
 
     /**
-     * @see https://api.monobank.ua/docs/#operation--personal-client-info-get
+     * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1client-info/get
      * @param {boolean | undefined} force - Force update (without cache)
      * @returns {Promise<UserInfo>} - Client's user info
      */
@@ -124,7 +141,7 @@ class Monobank
     }
 
     /**
-     * @see https://api.monobank.ua/docs/#operation--personal-webhook-post
+     * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1webhook/post
      * @param {string} url - Webhook url
      * @returns {boolean}
      */
@@ -133,7 +150,7 @@ class Monobank
     }
     
     /**
-     * @see https://api.monobank.ua/docs/#operation--personal-statement--account---from---to--get
+     * @see https://api.monobank.ua/docs/index.html#tag/Kliyentski-personalni-dani/paths/~1personal~1statement~1{account}~1{from}~1{to}/get
      * @param {string} account  - Client account id
      * @param {string | number | undefined} from - Unix time in seconds 
      * @param {string | number | undefined} to - Unix time in seconds

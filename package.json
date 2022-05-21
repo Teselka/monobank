@@ -1,6 +1,6 @@
 {
   "name": "monobankua",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "monobank.ua js api",
   "main": "index.js",
   "scripts": {
